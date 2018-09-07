@@ -16,4 +16,12 @@ public interface Plugin<T> {
    * @param target the target to remove this plugin from
    */
   void removeFrom(T target);
+
+  /**
+   * Gets a description of this plugin.
+   *
+   * @return a description of this plugin
+   */
+  Descriptor descriptor();
+
 }
