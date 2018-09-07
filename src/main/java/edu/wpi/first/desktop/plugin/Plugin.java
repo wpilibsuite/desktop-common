@@ -1,5 +1,12 @@
 package edu.wpi.first.desktop.plugin;
 
+import java.util.Collection;
+
+/**
+ * Common interface for plugins that can be loaded by the application at startup or at runtime.
+ *
+ * @param <T> the type of object the plugin applies to
+ */
 public interface Plugin<T> {
 
   /**
@@ -24,4 +31,8 @@ public interface Plugin<T> {
    */
   Descriptor descriptor();
 
+  /**
+   * Gets the requirements for all the plugins required by this one.
+   */
+  Collection<Requirement> requirements();
 }

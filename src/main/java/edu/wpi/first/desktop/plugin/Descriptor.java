@@ -1,7 +1,10 @@
 package edu.wpi.first.desktop.plugin;
 
 /**
- * Describes a plugin, including its owner, name, current version, and a summary of what the plugin provides.
+ * Describes a plugins group ID (a unique identifier for the group or organization that develops the plugin); and its
+ * name, version, and a summary of what the plugin provides.
+ *
+ * <p>Note that the version <i>must</i> follow <a href="http://semver.org">semantic versioning</a> guidelines.
  */
 public final class Descriptor {
 
@@ -27,6 +30,10 @@ public final class Descriptor {
     this.summary = summary;
   }
 
+  public static Descriptor fromAnnotation(Description annotation) {
+    return new Descriptor(annotation.groupId(), annotation.name(), annotation.version(), annotation.summary());
+  }
+
   public String getGroupId() {
     return groupId;
   }
@@ -50,5 +57,4 @@ public final class Descriptor {
   public String fullIdString() {
     return groupId + ":" + name + ":" + versionString;
   }
-
 }
