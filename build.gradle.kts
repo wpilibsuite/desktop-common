@@ -1,4 +1,3 @@
-
 import edu.wpi.first.wpilib.versioning.ReleaseType
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.FindBugs
@@ -30,6 +29,15 @@ plugins {
 group = "edu.wpi.first.desktop"
 version = getWPILibVersion() ?: getVersionFromGitTag(fallback = "0.0.0") // fall back to git describe if no WPILib version is set
 
+val osName = System.getProperty("os.name")
+
+val openjfxPlatform: String = when {
+    osName.contains("Windows") -> "win"
+    osName.contains("Mac") -> "mac"
+    osName.contains("Linux") -> "linux"
+    else -> throw GradleException("Could not determine JavaFX platform classifier for '$osName'")
+}
+
 repositories {
     mavenCentral()
     maven {
@@ -42,7 +50,25 @@ repositories {
     }
 }
 
+java {
+    // Note: we use Java 9 for compatibility with applications that may not work on 10 or higher (e.g. GRIP)
+    // But we still need to build on Java 11 due to the build system requiring it for the other desktop apps
+    sourceCompatibility = JavaVersion.VERSION_1_9
+    targetCompatibility = JavaVersion.VERSION_1_9
+}
+
 dependencies {
+    fun openjfx(name: String, version: String = "11-ea+25") =
+            create(group = "org.openjfx", name = name, version = version, classifier = openjfxPlatform)
+
+    compileOnly(openjfx("javafx-base"))
+    compileOnly(openjfx("javafx-controls"))
+    compileOnly(openjfx("javafx-graphics"))
+
+    testCompileOnly(openjfx("javafx-base"))
+    testCompileOnly(openjfx("javafx-controls"))
+    testCompileOnly(openjfx("javafx-graphics"))
+
     fun junitJupiter(name: String, version: String = "5.3.0") =
             create(group = "org.junit.jupiter", name = name, version = version)
     testCompile(junitJupiter(name = "junit-jupiter-api"))
@@ -83,7 +109,7 @@ publishing {
             artifactId = "desktop-common"
             version = getWPILibVersion() ?: project.version.toString()
             val jar: Jar by tasks
-            artifact (jar) {
+            artifact(jar) {
                 classifier = null
             }
             artifact(sourceJar)

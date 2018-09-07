@@ -17,9 +17,9 @@ public final class DragUtils extends UtilityClass {
    * @param format    the data format to get the data for
    * @param <T>       the expected type of the data
    *
-   * @return the data for the given data format, or <tt>null</tt> if no such data is present in the dragboard
+   * @return the data for the given data format, or {@code null} if no such data is present in the dragboard
    *
-   * @throws ClassCastException if the content in the dragboard for the data format is not of type <tt>T</tt>
+   * @throws ClassCastException if the content in the dragboard for the data format is not of type {@code T}
    */
   public static <T> T getData(Dragboard dragboard, DataFormat format) {
     return (T) dragboard.getContent(format);
