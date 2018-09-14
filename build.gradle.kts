@@ -77,13 +77,9 @@ dependencies {
     fun openjfx(name: String, version: String = "11-ea+25") =
             create(group = "org.openjfx", name = name, version = version, classifier = openjfxPlatform)
 
-    compileOnly(openjfx("javafx-base"))
-    compileOnly(openjfx("javafx-controls"))
-    compileOnly(openjfx("javafx-graphics"))
-
-    testCompileOnly(openjfx("javafx-base"))
-    testCompileOnly(openjfx("javafx-controls"))
-    testCompileOnly(openjfx("javafx-graphics"))
+    compile(openjfx("javafx-base"))
+    compile(openjfx("javafx-controls"))
+    compile(openjfx("javafx-graphics"))
 
     api(group = "org.controlsfx", name = "controlsfx", version = "9.0.0")
 
@@ -94,11 +90,11 @@ dependencies {
     testCompile(junitJupiter(name = "junit-jupiter-params"))
     testRuntime(create(group = "org.junit.platform", name = "junit-platform-launcher", version = "1.0.0"))
 
-    fun testFx(name: String, version: String = "+") =
+    fun testFx(name: String, version: String = "4.0.14-alpha") =
             create(group = "org.testfx", name = name, version = version)
     testCompile(testFx(name = "testfx-core"))
     testCompile(testFx(name = "testfx-junit5"))
-    testRuntime(testFx(name = "openjfx-monocle", version = "+"))
+    //testRuntime(testFx(name = "openjfx-monocle", version = "jdk-11+23"))
 }
 
 tasks.withType<Jar> {
@@ -106,6 +102,24 @@ tasks.withType<Jar> {
         attributes["Built-Date"] = System.currentTimeMillis()
         attributes["Implementation-Version"] = project.version
     }
+}
+
+val copyTestResources: Task = tasks.create<Copy>("copyTestResources") {
+    description = """
+        Copies resources from src/test/resources to build/classes/java/test so they are accessible by test classes
+        """.trim()
+    from("$projectDir/src/test/resources")
+    into("$buildDir/classes/java/test")
+}
+
+tasks.withType<Test> {
+    dependsOn(copyTestResources)
+    useJUnitPlatform()
+    jvmArgs = listOf(
+            "--add-opens", "edu.wpi.first.desktop/edu.wpi.first.desktop.plugin=org.junit.platform.commons",
+            "--add-opens", "edu.wpi.first.desktop/edu.wpi.first.desktop.theme=org.junit.platform.commons",
+            "--add-opens", "javafx.graphics/com.sun.javafx.application=org.testfx"
+    )
 }
 
 val sourceJar = task<org.gradle.jvm.tasks.Jar>("sourceJar") {
