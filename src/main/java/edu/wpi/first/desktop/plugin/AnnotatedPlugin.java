@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 /**
  * A plugin whose descriptor and requirements are specified with {@link Description @Description} and
  * {@link Requires @Requires}, respectively. Annotated plugins are useful because they do not have to be loaded to
- * read their description and requirements, which may cause problems if the plugin has dependencies on another,
- * unloaded, plugin.
+ * read their description and requirements, which may cause problems if the plugin has dependencies on another plugin
+ * that may have not been loaded at the time.
  *
  * @param <T> the type of object the plugin applies to
  */
