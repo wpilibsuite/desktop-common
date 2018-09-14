@@ -1,6 +1,7 @@
 package edu.wpi.first.desktop.theme;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -91,4 +92,19 @@ public final class ThemeContainer {
   public ObservableList<Theme> getThemes() {
     return themesUnmodifiable;
   }
+
+  /**
+   * Gets the theme in this container with the specified name.
+   *
+   * @param name the name of the theme to get. This is case-sensitive.
+   *
+   * @return an optional of the theme in this container with the specified name, or an empty optional if no such theme
+   *        is present
+   */
+  public Optional<Theme> getTheme(String name) {
+    return themes.stream()
+        .filter(t -> t.getName().equals(name))
+        .findFirst();
+  }
+
 }

@@ -69,6 +69,8 @@ dependencies {
     testCompileOnly(openjfx("javafx-controls"))
     testCompileOnly(openjfx("javafx-graphics"))
 
+    api(group = "org.controlsfx", name = "controlsfx", version = "9.0.0")
+
     fun junitJupiter(name: String, version: String = "5.3.0") =
             create(group = "org.junit.jupiter", name = name, version = version)
     testCompile(junitJupiter(name = "junit-jupiter-api"))
