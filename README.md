@@ -10,11 +10,20 @@ This is a library containing code shared by the various WPILib desktop applicati
 
 ## Packages
 
+**edu.wpi.first.desktop.component**  
+Useful controls and UI components.
+
 **edu.wpi.first.desktop.dnd**  
 Common classes for dealing with drag-and-drop and data formats.
 
 **edu.wpi.first.desktop.plugin**  
 Common classes for application plugins.
+
+**edu.wpi.first.desktop.property**  
+Custom JavaFX property implementations.
+
+**edu.wpi.first.desktop.settings**  
+A settings API and dialog for a shared experience across the desktop apps.
 
 **edu.wpi.first.desktop.theme**  
 Common classes for styling applications with CSS stylesheets.
@@ -23,8 +32,7 @@ Common classes for styling applications with CSS stylesheets.
 Miscellaneous classes for dealing with concurrency on the JavaFX application thread, system properties, and more.
 
 ## Module Info
-This library uses the module name `edu.wpi.first.desktop` and exports the packages listed above. This library has no
-external dependencies (barring `java.base` and the JavaFX modules), and is compatible with `jlink`.
+This library uses the module name `edu.wpi.first.desktop` and exports the packages listed above.
 
 ## Building
 
