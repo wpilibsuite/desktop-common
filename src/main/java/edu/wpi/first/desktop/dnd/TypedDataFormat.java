@@ -4,6 +4,8 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 
 /**
+ * A type of data format that provides a cast-less method of retrieving typed data from a clipboard or dragboard.
+ *
  * @param <T> the expected type of data corresponding to this data format
  */
 public class TypedDataFormat<T> extends DataFormat {

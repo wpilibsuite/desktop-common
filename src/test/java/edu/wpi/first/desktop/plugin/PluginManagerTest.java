@@ -16,9 +16,9 @@ class PluginManagerTest {
   private MockTarget target;
   private PluginManager<MockTarget> pluginManager;
 
-  private final Descriptor BASE_DESCRIPTOR = new Descriptor("group", "name", Version.of(1, 0, 0), "summary");
-  private final Requirement BASE_REQUIREMENT = Requirement.from(BASE_DESCRIPTOR);
-  private final MockPlugin BASE_PLUGIN = new MockPlugin(BASE_DESCRIPTOR);
+  private static final Descriptor BASE_DESCRIPTOR = new Descriptor("group", "name", Version.of(1, 0, 0), "summary");
+  private static final Requirement BASE_REQUIREMENT = Requirement.from(BASE_DESCRIPTOR);
+  private static final MockPlugin BASE_PLUGIN = new MockPlugin(BASE_DESCRIPTOR);
 
   @BeforeEach
   void setup() {
@@ -86,8 +86,12 @@ class PluginManagerTest {
   @Test
   void testUnloadWithTransitiveDownstreamDependencies() {
     pluginManager.load(BASE_PLUGIN);
-    MockPlugin direct = new MockPlugin(new Descriptor("g", "d", Version.of(1, 0, 0), ""), BASE_REQUIREMENT);
-    MockPlugin transitive = new MockPlugin(new Descriptor("g", "t", Version.of(1, 0, 0), ""), Requirement.from(direct.descriptor()));
+    MockPlugin direct = new MockPlugin(
+        new Descriptor("g", "d", Version.of(1, 0, 0), ""),
+        BASE_REQUIREMENT);
+    MockPlugin transitive = new MockPlugin(
+        new Descriptor("g", "t", Version.of(1, 0, 0), ""),
+        Requirement.from(direct.descriptor()));
     pluginManager.load(direct);
     pluginManager.load(transitive);
     assertEquals(Set.of(BASE_PLUGIN, direct, transitive), pluginManager.getLoadedPlugins());

@@ -16,5 +16,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Requirements {
+  /**
+   * The requirements of the plugin.
+   */
   Requires[] value();
 }

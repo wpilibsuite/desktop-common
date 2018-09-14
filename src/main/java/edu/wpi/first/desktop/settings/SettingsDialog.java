@@ -26,6 +26,10 @@ public final class SettingsDialog {
   private final SettingsSheet settingsSheet = new SettingsSheet();
 
   public SettingsDialog() {
+    initialize();
+  }
+
+  private void initialize() {
     rootItem.setExpanded(true);
     categories.setMinWidth(180);
     categories.getStyleClass().add("settings-categories");

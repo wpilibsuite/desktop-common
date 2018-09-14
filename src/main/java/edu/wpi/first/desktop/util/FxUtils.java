@@ -51,6 +51,17 @@ public final class FxUtils extends UtilityClass {
   }
 
   /**
+   * Schedules a batch of tasks to run on the application thread.
+   *
+   * @param tasks the tasks to run on the application thread
+   *
+   * @see #runOnFxThread(Runnable)
+   */
+  public static void runOnFxThread(Iterable<Runnable> tasks) {
+    runOnFxThread(batchRunnables(tasks));
+  }
+
+  /**
    * Runs a task on the FX thread and blocks until the task completes or throws an error.
    *
    * @param task the task to run
@@ -78,24 +89,6 @@ public final class FxUtils extends UtilityClass {
   }
 
   /**
-   * Schedules a batch of tasks to run later on the application thread.
-   *
-   * @param tasks the tasks to run on the application thread
-   */
-  public static void runLater(Iterable<Runnable> tasks) {
-    Platform.runLater(batchRunnables(tasks));
-  }
-
-  /**
-   * Schedules a batch of tasks to run on the application thread.
-   *
-   * @param tasks the tasks to run on the application thread
-   */
-  public static void runOnFxThread(Iterable<Runnable> tasks) {
-    runOnFxThread(batchRunnables(tasks));
-  }
-
-  /**
    * Schedules a batch of tasks to run later on the application thread and blocks until all tasks have completed.
    *
    * @param tasks the tasks to run on the application thread
@@ -104,6 +97,15 @@ public final class FxUtils extends UtilityClass {
    */
   public static void runAndWait(Iterable<Runnable> tasks) throws InterruptedException {
     runAndWait(batchRunnables(tasks));
+  }
+
+  /**
+   * Schedules a batch of tasks to run later on the application thread.
+   *
+   * @param tasks the tasks to run on the application thread
+   */
+  public static void runLater(Iterable<Runnable> tasks) {
+    Platform.runLater(batchRunnables(tasks));
   }
 
   private static Runnable batchRunnables(Iterable<Runnable> tasks) {

@@ -70,7 +70,7 @@ public class PluginManager<T> {
   }
 
   /**
-   * Checks if a plugin can be loaded; that is, it meets all of the following conditions:
+   * Checks if a plugin can be loaded. A plugin can be loaded only if it meets all of the following conditions:
    * <ul>
    * <li>All of its requirements are currently loaded; and</li>
    * <li>No known plugin shares its name and group ID</li>

@@ -1,10 +1,7 @@
 package edu.wpi.first.desktop.util;
 
-import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.function.Function;
 
-import javafx.beans.binding.Binding;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -16,9 +13,6 @@ import javafx.collections.ObservableMap;
  * Utility methods for working with JavaFX properties.
  */
 public final class PropertyUtils extends UtilityClass {
-
-  // used to keep track of bindings so they don't get GC'd too early
-  private static final Map<Property, Binding> bindings = new WeakHashMap<>();
 
   private PropertyUtils() {
     throw new UnsupportedOperationException("This is a utility class!");

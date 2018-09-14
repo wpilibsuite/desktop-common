@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -96,6 +95,7 @@ class VersionTest {
   }
 
   @Test
+  @SuppressWarnings("LocalVariableName")
   void testCompareToHigherMajor() {
     Version a = Version.of(1, 0, 0);
     Version b = Version.of(20, 0, 0);
@@ -105,6 +105,7 @@ class VersionTest {
   }
 
   @Test
+  @SuppressWarnings("LocalVariableName")
   void testCompareToHigherMinor() {
     Version a = Version.of(1, 0, 0);
     Version b = Version.of(1, 100, 0);
@@ -114,6 +115,7 @@ class VersionTest {
   }
 
   @Test
+  @SuppressWarnings("LocalVariableName")
   void testCompareToHigherPatch() {
     Version a = Version.of(1, 0, 0);
     Version b = Version.of(1, 0, 10);
@@ -123,6 +125,7 @@ class VersionTest {
   }
 
   @Test
+  @SuppressWarnings("LocalVariableName")
   void testCompareToOneNullIdentifier() {
     Version a = Version.of(1, 2, 3);
     Version b = Version.of(1, 2, 3, "identifier");
@@ -134,6 +137,7 @@ class VersionTest {
   }
 
   @Test
+  @SuppressWarnings("LocalVariableName")
   void testCompareToTwoIdentifiers() {
     Version a = Version.of(1, 2, 3, "a");
     Version b = Version.of(1, 2, 3, "b");

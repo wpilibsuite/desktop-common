@@ -4,6 +4,7 @@ package edu.wpi.first.desktop.util;
  * A base class for utility classes. The only constructor is {@code protected} and will always throw a
  * {@link UnsupportedOperationException} if called.
  */
+@SuppressWarnings("PMD.AbstractClassWithoutAbstractMethod")
 public abstract class UtilityClass {
 
   protected UtilityClass() {

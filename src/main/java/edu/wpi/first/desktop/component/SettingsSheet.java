@@ -1,8 +1,8 @@
 package edu.wpi.first.desktop.component;
 
+import edu.wpi.first.desktop.component.editor.DebouncedTextPropertyEditor;
 import edu.wpi.first.desktop.component.editor.IntegerPropertyEditor;
 import edu.wpi.first.desktop.component.editor.NumberPropertyEditor;
-import edu.wpi.first.desktop.component.editor.DebouncedTextPropertyEditor;
 import edu.wpi.first.desktop.component.editor.ToggleSwitchEditor;
 import edu.wpi.first.desktop.component.skin.SettingsSheetSkin;
 import edu.wpi.first.desktop.settings.Category;
@@ -92,6 +92,11 @@ public final class SettingsSheet extends PropertySheet {
     addCategory(settingsCategory);
   }
 
+  /**
+   * Adds a category to this sheet.
+   *
+   * @param category the category to add
+   */
   public void addCategory(Category category) {
     setMode(PropertySheet.Mode.CATEGORY);
     for (Group group : category.getGroups()) {

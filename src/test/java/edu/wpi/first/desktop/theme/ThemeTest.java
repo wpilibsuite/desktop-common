@@ -1,7 +1,6 @@
 package edu.wpi.first.desktop.theme;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
@@ -18,6 +17,7 @@ import javafx.stage.Stage;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ThemeTest extends ApplicationTest {
 
@@ -37,25 +37,26 @@ class ThemeTest extends ApplicationTest {
 
   @Test
   void sanityCheck() {
-    assertAll(
+    Class<NullPointerException> nullPointer = NullPointerException.class;
+    assertAll("Constructors and getters sanity checks",
         () -> {
           Theme theme = new Theme("Name", "path");
           assertEquals("Name", theme.getName(), "Wrong name");
         },
         () -> {
-          Assertions.assertThrows(NullPointerException.class, () -> new Theme("", (URL) null), "Null URLs should throw NPE");
+          assertThrows(nullPointer, () -> new Theme("", (URL) null), "Null URLs should throw NPE");
         },
         () -> {
-          Assertions.assertThrows(NullPointerException.class, () -> new Theme("", (String) null), "Null URLs should throw NPE");
+          assertThrows(nullPointer, () -> new Theme("", (String) null), "Null URLs should throw NPE");
         },
         () -> {
-          Assertions.assertThrows(NullPointerException.class, () -> new Theme("", (List<URL>) null), "Null URLs should throw NPE");
+          assertThrows(nullPointer, () -> new Theme("", (List<URL>) null), "Null URLs should throw NPE");
         },
         () -> {
-          Assertions.assertThrows(NullPointerException.class, () -> new Theme("", singletonList(null)), "Null URLs should throw NPE");
+          assertThrows(nullPointer, () -> new Theme("", singletonList(null)), "Null URLs should throw NPE");
         },
         () -> {
-          Assertions.assertThrows(NullPointerException.class, () -> new Theme(null, ""), "Null name should throw NPE");
+          assertThrows(nullPointer, () -> new Theme(null, ""), "Null name should throw NPE");
         },
         () -> {
           Theme theme = new Theme("", "path");

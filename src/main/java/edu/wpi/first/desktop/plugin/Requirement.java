@@ -29,6 +29,10 @@ public final class Requirement {
     return new Requirement(annotation.groupId(), annotation.name(), Version.parse(annotation.minVersion()));
   }
 
+  // Package-private for tests
+  // Allowing users to use this would mean plugins compiled with a dependency on, say, v1.0.1 would not work in
+  // an application where v1.0.0 was loaded, even though it could work perfectly well on v1.0.0
+  @SuppressWarnings("PMD.DefaultPackage")
   static Requirement from(Descriptor descriptor) {
     return new Requirement(descriptor.getGroupId(), descriptor.getName(), descriptor.getVersion());
   }

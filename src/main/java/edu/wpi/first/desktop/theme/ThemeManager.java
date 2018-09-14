@@ -25,6 +25,10 @@ public final class ThemeManager {
 
   private final ObjectProperty<Theme> theme = new SimpleObjectProperty<>(this, "theme", Theme.MODENA);
 
+  /**
+   * Creates a new theme manager that by default has nothing to manage. Scenes and nodes can be managed by calling
+   * {@link #addScene(Scene)} and {@link #addNode(Parent)} on newly created managers.
+   */
   public ThemeManager() {
     theme.addListener((__, old, theme) -> {
       for (Scene scene : scenes) {

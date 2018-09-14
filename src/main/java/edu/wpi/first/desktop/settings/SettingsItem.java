@@ -4,7 +4,6 @@ import org.controlsfx.control.PropertySheet;
 
 import java.util.Optional;
 
-import javafx.beans.property.Property;
 import javafx.beans.value.ObservableValue;
 
 /**
@@ -15,6 +14,12 @@ public final class SettingsItem implements PropertySheet.Item {
   private final Group group;
   private final Class<?> type;
 
+  /**
+   * Creates a new settings item.
+   *
+   * @param group   the group containing the setting
+   * @param setting the setting to wrap
+   */
   public SettingsItem(Group group, Setting<?> setting) {
     this.setting = setting;
     this.group = group;
@@ -47,13 +52,13 @@ public final class SettingsItem implements PropertySheet.Item {
 
   @Override
   public Object getValue() {
-    return setting.getProperty().getValue();
+    return setting.getValue();
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public void setValue(Object value) {
-    ((Property) setting.getProperty()).setValue(value);
+    ((Setting) setting).setValue(value);
   }
 
   @Override

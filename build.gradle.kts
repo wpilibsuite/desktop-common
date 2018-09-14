@@ -21,9 +21,25 @@ buildscript {
 plugins {
     `java-library`
     `maven-publish`
+    `pmd`
+    `checkstyle`
     id("com.zyxist.chainsaw") version "0.3.1"
     id("edu.wpi.first.wpilib.versioning.WPILibVersioningPlugin") version "2.0"
     id("org.ajoberstar.grgit") version "1.7.2"
+}
+
+checkstyle {
+    configFile = file("$rootDir/checkstyle.xml")
+    toolVersion = "8.12"
+}
+
+pmd {
+    toolVersion = "6.5.0"
+    isConsoleOutput = true
+    sourceSets = setOf(java.sourceSets["main"])
+    reportsDir = file("${project.buildDir}/reports/pmd")
+    ruleSetFiles = files(file("$rootDir/pmd-ruleset.xml"))
+    ruleSets = emptyList()
 }
 
 group = "edu.wpi.first.desktop"

@@ -62,6 +62,7 @@ public final class ShutdownHooks extends UtilityClass {
   /**
    * Resets the hooks. Should only be used in tests.
    */
+  @SuppressWarnings("PMD.DefaultPackage") // package-private for tests
   static void reset() {
     runningHooks = false;
   }
@@ -69,6 +70,7 @@ public final class ShutdownHooks extends UtilityClass {
   /**
    * Removes all hooks. Should only be used in tests.
    */
+  @SuppressWarnings("PMD.DefaultPackage") // package-private for tests
   static void removeAllHooks() {
     if (runningHooks) {
       return;

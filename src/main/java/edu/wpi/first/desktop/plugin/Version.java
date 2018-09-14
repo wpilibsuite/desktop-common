@@ -5,7 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * A semver-compliant version object with the following modifications:
+ * A mostly semver-compliant version class. For simplicity, this deviates from the semver standard in the following
+ * ways:
  * <ul>
  * <li>Version identifiers have no special cases for comparison; identifiers beginning with {@code -} or {@code +}
  * have no special significance</li>
@@ -172,7 +173,7 @@ public final class Version implements Comparable<Version> {
    * @param other the object to be compared
    *
    * @return a negative integer, zero, or a positive integer as this version object is less than, equal to, or greater
-   * than the specified version.
+   *         than the specified version.
    */
   @Override
   public int compareTo(Version other) {
