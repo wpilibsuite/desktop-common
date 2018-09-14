@@ -8,6 +8,7 @@ import org.ajoberstar.grgit.Grgit
 import org.ajoberstar.grgit.exception.GrgitException
 import org.ajoberstar.grgit.operation.DescribeOp
 import java.time.Instant
+import java.util.Locale
 
 buildscript {
     repositories {
@@ -112,14 +113,44 @@ val copyTestResources: Task = tasks.create<Copy>("copyTestResources") {
     into("$buildDir/classes/java/test")
 }
 
+/**
+ * Opens a package to an external module for use in reflection.
+ *
+ * @param module        the module containing the package to open
+ * @param sourcePackage the package to open
+ * @param targetModule  the module to open the package to
+ */
+data class Open(val module: String, val sourcePackage: String, val targetModule: String) {
+    companion object {
+        fun toJunit(sourcePackage: String): Open = Open("edu.wpi.first.desktop", sourcePackage, "org.junit.platform.commons")
+    }
+}
+
+fun List<Open>.toJvmArgs(): List<String> {
+    return flatMap {
+        listOf("--add-opens", "${it.module}/${it.sourcePackage}=${it.targetModule}")
+    }
+}
+
 tasks.withType<Test> {
     dependsOn(copyTestResources)
     useJUnitPlatform()
-    jvmArgs = listOf(
-            "--add-opens", "edu.wpi.first.desktop/edu.wpi.first.desktop.plugin=org.junit.platform.commons",
-            "--add-opens", "edu.wpi.first.desktop/edu.wpi.first.desktop.theme=org.junit.platform.commons",
-            "--add-opens", "javafx.graphics/com.sun.javafx.application=org.testfx"
+    val opens: List<Open> = listOf(
+            Open.toJunit("edu.wpi.first.desktop.plugin"),
+            Open.toJunit("edu.wpi.first.desktop.theme"),
+            Open("javafx.graphics", "com.sun.javafx.application", "org.testfx")
     )
+    if (System.getProperty("os.name").toLowerCase(Locale.US).contains("windows")) {
+        println("Windows detected. UI tests will not run. See https://github.com/javafxports/openjdk-jfx/issues/66")
+        jvmArgs = opens.toJvmArgs()
+    } else {
+        jvmArgs = opens.toJvmArgs() + listOf(
+                "-Djava.awt.headless=true",
+                "-Dtestfx.robot=glass",
+                "-Dtestfx.headless=true",
+                "-Dprism.order=sw",
+                "-Dprism.text=t2k")
+    }
 }
 
 val sourceJar = task<org.gradle.jvm.tasks.Jar>("sourceJar") {
