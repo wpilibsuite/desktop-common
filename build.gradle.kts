@@ -135,6 +135,10 @@ fun List<Open>.toJvmArgs(): List<String> {
 tasks.withType<Test> {
     dependsOn(copyTestResources)
     useJUnitPlatform()
+    testLogging {
+        showStackTraces = true
+        showStandardStreams = true
+    }
     val opens: List<Open> = listOf(
             Open.toJunit("edu.wpi.first.desktop.plugin"),
             Open.toJunit("edu.wpi.first.desktop.theme"),
