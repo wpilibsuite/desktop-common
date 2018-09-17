@@ -4,6 +4,7 @@ import org.gradle.api.plugins.quality.FindBugs
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.wrapper.Wrapper
 import org.gradle.jvm.tasks.Jar
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.ajoberstar.grgit.Grgit
 import org.ajoberstar.grgit.exception.GrgitException
 import org.ajoberstar.grgit.operation.DescribeOp
@@ -95,7 +96,8 @@ dependencies {
             create(group = "org.testfx", name = name, version = version)
     testCompile(testFx(name = "testfx-core"))
     testCompile(testFx(name = "testfx-junit5"))
-    //testRuntime(testFx(name = "openjfx-monocle", version = "jdk-11+23"))
+    // See https://github.com/TestFX/Monocle/issues/61
+    //testRuntime(testFx(name = "openjfx-monocle", version = "jdk-11+23")) // Can't use - no module name and the JVM-derived one is invalid (openjfx.monocle.jdk.11.23)
 }
 
 tasks.withType<Jar> {
@@ -134,27 +136,22 @@ fun List<Open>.toJvmArgs(): List<String> {
 
 tasks.withType<Test> {
     dependsOn(copyTestResources)
-    useJUnitPlatform()
+    useJUnitPlatform {
+        // TestFX is broken on Windows, and Monocle cannot be used in modularized projects
+        println("UI tests will not run. See https://github.com/javafxports/openjdk-jfx/issues/66 and https://github.com/TestFX/Monocle/issues/61")
+        excludeTags("UI")
+    }
     testLogging {
         showStackTraces = true
         showStandardStreams = true
+        exceptionFormat = TestExceptionFormat.FULL
     }
     val opens: List<Open> = listOf(
             Open.toJunit("edu.wpi.first.desktop.plugin"),
             Open.toJunit("edu.wpi.first.desktop.theme"),
             Open("javafx.graphics", "com.sun.javafx.application", "org.testfx")
     )
-    if (System.getProperty("os.name").toLowerCase(Locale.US).contains("windows")) {
-        println("Windows detected. UI tests will not run. See https://github.com/javafxports/openjdk-jfx/issues/66")
-        jvmArgs = opens.toJvmArgs()
-    } else {
-        jvmArgs = opens.toJvmArgs() + listOf(
-                "-Djava.awt.headless=true",
-                "-Dtestfx.robot=glass",
-                "-Dtestfx.headless=true",
-                "-Dprism.order=sw",
-                "-Dprism.text=t2k")
-    }
+    jvmArgs = opens.toJvmArgs()
 }
 
 val sourceJar = task<org.gradle.jvm.tasks.Jar>("sourceJar") {
