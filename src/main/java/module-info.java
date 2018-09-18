@@ -17,7 +17,12 @@ module edu.wpi.first.desktop {
   exports edu.wpi.first.desktop.util;
 
   exports org.controlsfx.control;
+  exports org.controlsfx.control.action;
+  exports org.controlsfx.dialog;
+  exports org.controlsfx.glyphfont;
   exports org.controlsfx.property;
   exports org.controlsfx.property.editor;
   exports org.controlsfx.tools;
+
+  uses org.controlsfx.glyphfont.GlyphFont;
 }
