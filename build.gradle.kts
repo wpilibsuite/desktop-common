@@ -87,9 +87,9 @@ dependencies {
     fun openjfx(name: String, version: String = "11") =
             create(group = "org.openjfx", name = name, version = version, classifier = openjfxPlatform)
 
-    compile(openjfx("javafx-base"))
-    compile(openjfx("javafx-controls"))
-    compile(openjfx("javafx-graphics"))
+    compileOnly(openjfx("javafx-base"))
+    compileOnly(openjfx("javafx-controls"))
+    compileOnly(openjfx("javafx-graphics"))
 
     // Still uses JavaFX internals and forces dependent apps to use --add-exports flags
     // The controlsfx maintainers don't seem interested in fixing this for a while
@@ -187,10 +187,7 @@ publishing {
             groupId = "edu.wpi.first.desktop"
             artifactId = "desktop-common"
             version = getWPILibVersion() ?: project.version.toString()
-            val jar: Jar by tasks
-            artifact(jar) {
-                classifier = null
-            }
+            from(project.components["java"])
             artifact(sourceJar)
             artifact(javadocJar)
         }
