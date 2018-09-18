@@ -4,11 +4,17 @@ import edu.wpi.first.desktop.component.SettingsSheet;
 import edu.wpi.first.desktop.property.FlushableProperty;
 import edu.wpi.first.desktop.util.TypeUtils;
 
+import org.controlsfx.control.PropertySheet;
+import org.controlsfx.property.editor.PropertyEditor;
+
 import java.util.List;
 
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
@@ -16,6 +22,10 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Screen;
+import javafx.stage.StageStyle;
+import javafx.util.Callback;
 
 public final class SettingsDialog extends Dialog<Boolean> {
 
@@ -36,6 +46,7 @@ public final class SettingsDialog extends Dialog<Boolean> {
   }
 
   private void initialize() {
+    root.getStyleClass().add("settings-pane");
     rootItem.setExpanded(true);
     categories.setMinWidth(180);
     categories.getStyleClass().add("settings-categories");
@@ -44,7 +55,12 @@ public final class SettingsDialog extends Dialog<Boolean> {
     categories.setCellFactory(v -> {
       TreeCell<Category> cell = new TreeCell<>();
       cell.setPrefWidth(1);
-      cell.textProperty().bind(Bindings.createObjectBinding(() -> cell.getItem().getName(), cell.itemProperty()));
+      cell.textProperty().bind(
+          Bindings.createObjectBinding(
+              () -> cell.getItem() == null ? null : cell.getItem().getName(),
+              cell.itemProperty()
+          )
+      );
       return cell;
     });
     categories.getSelectionModel().selectedItemProperty().addListener((__, old, item) -> {
@@ -58,7 +74,35 @@ public final class SettingsDialog extends Dialog<Boolean> {
       }
     });
 
+    categories.setMinWidth(180);
+    view.setMinWidth(340);
+    getDialogPane().setContent(root);
+    getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.OK);
+    setResultConverter(button -> !button.getButtonData().isCancelButton());
+
+    initModality(Modality.APPLICATION_MODAL);
+    initStyle(StageStyle.UTILITY);
+    setResizable(true);
+
+    Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+    getDialogPane().setPrefSize(
+        Math.max(600, visualBounds.getWidth() / 2),
+        Math.max(400, visualBounds.getHeight() / 2)
+    );
+
     Platform.runLater(() -> root.setDividerPositions(0));
+  }
+
+  public ObjectProperty<Callback<PropertySheet.Item, PropertyEditor<?>>> propertyEditorFactoryProperty() {
+    return settingsSheet.propertyEditorFactory();
+  }
+
+  public void setPropertyEditorFactory(Callback<PropertySheet.Item, PropertyEditor<?>> propertyEditorFactory) {
+    propertyEditorFactoryProperty().set(propertyEditorFactory);
+  }
+
+  public Callback<PropertySheet.Item, PropertyEditor<?>> getPropertyEditorFactory() {
+    return propertyEditorFactoryProperty().get();
   }
 
   private void setViewForCategory(Category category) {
@@ -67,6 +111,7 @@ public final class SettingsDialog extends Dialog<Boolean> {
     } else {
       settingsSheet.getItems().clear();
       settingsSheet.addCategory(category);
+      view.getChildren().setAll(settingsSheet);
     }
   }
 
