@@ -87,9 +87,15 @@ dependencies {
     fun openjfx(name: String, version: String = "11") =
             create(group = "org.openjfx", name = name, version = version, classifier = openjfxPlatform)
 
+    // compileOnly so downstreams don't get platform-specific dependencies
     compileOnly(openjfx("javafx-base"))
     compileOnly(openjfx("javafx-controls"))
     compileOnly(openjfx("javafx-graphics"))
+
+    // ... but that means we do have to re-declare them for testCompile
+    testCompile(openjfx("javafx-base"))
+    testCompile(openjfx("javafx-controls"))
+    testCompile(openjfx("javafx-graphics"))
 
     // Still uses JavaFX internals and forces dependent apps to use --add-exports flags
     // The controlsfx maintainers don't seem interested in fixing this for a while
