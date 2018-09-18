@@ -9,6 +9,7 @@ import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeCell;
@@ -16,7 +17,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.StackPane;
 
-public final class SettingsDialog {
+public final class SettingsDialog extends Dialog<Boolean> {
 
   private final TreeItem<Category> rootItem = new TreeItem<>();
   private final TreeView<Category> categories = new TreeView<>(rootItem);
@@ -27,6 +28,11 @@ public final class SettingsDialog {
 
   public SettingsDialog() {
     initialize();
+  }
+
+  public SettingsDialog(List<Category> rootCategories) {
+    this();
+    setRootCategories(rootCategories);
   }
 
   private void initialize() {

@@ -2,9 +2,10 @@
  * Provides various utility classes for use by the WPILib desktop applications that use JavaFX.
  */
 module edu.wpi.first.desktop {
+  requires java.desktop;
   requires javafx.graphics;
   requires javafx.controls;
-  requires controlsfx;
+  requires com.github.samcarlberg.fxbehaviors;
 
   exports edu.wpi.first.desktop.component; // note: the skin package is not exported
   exports edu.wpi.first.desktop.component.editor;
@@ -14,4 +15,9 @@ module edu.wpi.first.desktop {
   exports edu.wpi.first.desktop.settings;
   exports edu.wpi.first.desktop.theme;
   exports edu.wpi.first.desktop.util;
+
+  exports org.controlsfx.control;
+  exports org.controlsfx.property;
+  exports org.controlsfx.property.editor;
+  exports org.controlsfx.tools;
 }

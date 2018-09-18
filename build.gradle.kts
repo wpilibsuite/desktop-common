@@ -44,6 +44,10 @@ pmd {
     ruleSets = emptyList()
 }
 
+tasks.withType<Pmd> {
+    exclude("**/controlsfx/**")
+}
+
 group = "edu.wpi.first.desktop"
 version = getWPILibVersion() ?: getVersionFromGitTag(fallback = "0.0.0") // fall back to git describe if no WPILib version is set
 
@@ -66,6 +70,10 @@ repositories {
         name = "WPILib Release"
         setUrl("http://first.wpi.edu/FRC/roborio/maven/release")
     }
+    maven {
+        name = "Bintray"
+        setUrl("https://dl.bintray.com/samcarlberg/maven-artifacts")
+    }
 }
 
 java {
@@ -76,14 +84,17 @@ java {
 }
 
 dependencies {
-    fun openjfx(name: String, version: String = "11-ea+25") =
+    fun openjfx(name: String, version: String = "11") =
             create(group = "org.openjfx", name = name, version = version, classifier = openjfxPlatform)
 
     compile(openjfx("javafx-base"))
     compile(openjfx("javafx-controls"))
     compile(openjfx("javafx-graphics"))
 
-    api(group = "org.controlsfx", name = "controlsfx", version = "9.0.0")
+    // Still uses JavaFX internals and forces dependent apps to use --add-exports flags
+    // The controlsfx maintainers don't seem interested in fixing this for a while
+    //api(group = "org.controlsfx", name = "controlsfx", version = "9.0.0")
+    api(group = "com.github.samcarlberg", name = "fxbehaviors", version = "0.2.0")
 
     fun junitJupiter(name: String, version: String = "5.3.0") =
             create(group = "org.junit.jupiter", name = name, version = version)
@@ -92,10 +103,10 @@ dependencies {
     testCompile(junitJupiter(name = "junit-jupiter-params"))
     testRuntime(create(group = "org.junit.platform", name = "junit-platform-launcher", version = "1.0.0"))
 
-    fun testFx(name: String, version: String = "4.0.14-alpha") =
-            create(group = "org.testfx", name = name, version = version)
-    testCompile(testFx(name = "testfx-core"))
-    testCompile(testFx(name = "testfx-junit5"))
+    //fun testFx(name: String, version: String = "4.0.14-alpha") =
+    //        create(group = "org.testfx", name = name, version = version)
+    //testCompile(testFx(name = "testfx-core"))
+    //testCompile(testFx(name = "testfx-junit5"))
     // See https://github.com/TestFX/Monocle/issues/61
     //testRuntime(testFx(name = "openjfx-monocle", version = "jdk-11+23")) // Can't use - no module name and the JVM-derived one is invalid (openjfx.monocle.jdk.11.23)
 }
@@ -152,6 +163,10 @@ tasks.withType<Test> {
             Open("javafx.graphics", "com.sun.javafx.application", "org.testfx")
     )
     jvmArgs = opens.toJvmArgs()
+}
+
+tasks.withType<Javadoc> {
+    isFailOnError = false
 }
 
 val sourceJar = task<org.gradle.jvm.tasks.Jar>("sourceJar") {
