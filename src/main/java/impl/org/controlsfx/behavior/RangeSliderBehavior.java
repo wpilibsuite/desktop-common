@@ -26,9 +26,9 @@
  */
 package impl.org.controlsfx.behavior;
 
-import com.github.samcarlberg.fxbehaviors.BehaviorBase;
-import com.github.samcarlberg.fxbehaviors.InputBindings;
-import com.github.samcarlberg.fxbehaviors.KeyBinding;
+import edu.wpi.first.desktop.fxbehaviors.BehaviorBase;
+import edu.wpi.first.desktop.fxbehaviors.InputBindings;
+import edu.wpi.first.desktop.fxbehaviors.KeyBinding;
 
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.tools.Utils;

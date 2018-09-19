@@ -70,10 +70,6 @@ repositories {
         name = "WPILib Release"
         setUrl("http://first.wpi.edu/FRC/roborio/maven/release")
     }
-    maven {
-        name = "Bintray"
-        setUrl("https://dl.bintray.com/samcarlberg/maven-artifacts")
-    }
 }
 
 java {
@@ -100,7 +96,6 @@ dependencies {
     // Still uses JavaFX internals and forces dependent apps to use --add-exports flags
     // The controlsfx maintainers don't seem interested in fixing this for a while
     //api(group = "org.controlsfx", name = "controlsfx", version = "9.0.0")
-    api(group = "com.github.samcarlberg", name = "fxbehaviors", version = "0.2.0")
 
     fun junitJupiter(name: String, version: String = "5.3.0") =
             create(group = "org.junit.jupiter", name = name, version = version)
@@ -166,7 +161,8 @@ tasks.withType<Test> {
     val opens: List<Open> = listOf(
             Open.toJunit("edu.wpi.first.desktop.plugin"),
             Open.toJunit("edu.wpi.first.desktop.theme"),
-            Open("javafx.graphics", "com.sun.javafx.application", "org.testfx")
+            Open("javafx.graphics", "com.sun.javafx.application", "org.testfx"),
+            Open("javafx.graphics", "javafx.application", "edu.wpi.first.desktop")
     )
     jvmArgs = opens.toJvmArgs()
 }
